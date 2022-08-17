@@ -17,16 +17,13 @@ class Home extends React.Component {
 
     render(){
         return(
-            // <div className= "mt-5 d-flex justify-content-left">
-            //     <h3>Welcome to Bridgelabz</h3>
-            //     <Header/>
-            // </div>
+           
             <div>
                 <Header/>
                  <div className='navbar navbar-xpand-md'>
                     <ul>
                         <li className="nav-item">
-                           {/* <a className="nav-link" href="/payroll-form"> */}
+                           
                            <a className="add-button" href="/payroll-form">
 
                             {/* <img src={add} alt="Add User Logo"/> */}
@@ -43,6 +40,7 @@ class Home extends React.Component {
                 <table id="payroll-table">
                 <thead>
                     <tr>
+                        <th>ID</th>
                     <th>Name</th>
                     <th>Image Path</th>
                     <th>Gender</th>

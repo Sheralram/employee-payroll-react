@@ -1,155 +1,208 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 
 //  import logo from './../../assets/logo.png'
 import logo from '../../assets/logo.png'
 
- import './../payroll-form/payroll-form.css'
- import{Header} from '../header/header'
+import './../payroll-form/payroll-form.css'
+import { Header } from '../header/header'
 import profile1 from '../../assets/Ellipse -3.png';
 import profile2 from '../../assets/Ellipse 1.png';
 import profile3 from '../../assets/Ellipse -8.png';
 import profile4 from '../../assets/Ellipse -7.png';
+import EmployeeService from '../../service/EmployeeService';
 
 
 
 
- class Payrollform extends React.Component {
+class Payrollform extends React.Component {
 
 
-    constructor(){
+    constructor() {
         super()
+        // this.employeeService = new EmployeeService();
+        this.employeePayrollObject = {}
         this.profileRef1 = React.createRef();
         this.state = {
-            
+
             name: '',
             gender: '',
-            departmentValue: [],
-            nameError: '',
-            profile: '',
+            department: '',
+            day:'',
+            month:'',
+            year:'',
+            imagePath: '',
             salary: '',
+            startDate:'',
             notes: '',
+            nameError: '',
 
         }
+
+
     }
 
+    changeValue = (event) => {
+        this.setState({ [event.target.name]: event.target.value })
+        console.log([event.target.name] + ":" + event.target.value)
+    }
 
-    render(){
-        return(
-           
-<div>
-            {/* <div>
-                <header className="header-content header">
-                    <div className="logo-content">
-                        <img src={logo} alt="logo"/>
-                        
-                        <div>
-                            <span className="emp-text">EMPLOYEE</span><br/>
-                            <span className="emp-text emp-payroll">PAYROLL</span>
+    onNameChange = (event) => {
+        console.log("value is ", event.target.value);
+        this.setState({ name: event.target.value })
+        const nameRegex = RegExp('^[A-Z][a-zA-Z\\s]{2,}$');
+        if (nameRegex.test(event.target.value) || event.target.value === '') this.setState({ nameError: '' })
+        else this.setState({ nameError: 'Invalid Name' })
+    }
+
+validData = (data) => {
+    let isValid = true;
+    if(data.nameError !== '')
+    {
+        isValid = false;
+    }
+    return isValid;
+}
+
+isCheckBoxChecked(deptName) {
+    if (this.state.department.indexOf(deptName) > -1) {
+        return true;
+    }
+    return false;
+}
+
+
+
+    save = async (Event) => {
+        Event.preventDefault();
+
+        if(!this.validData(this.state)){
+            console.log("Error Present");
+            return;
+        }
+
+        this.employeePayrollObject = {
+            id : this.state.id,
+            name : this.state.name,
+            imagePath : this.state.imagePath,
+            gender : this.state.gender,
+            department : this.state.department,
+            startDate:`${this.state.day} ${this.state.month} ${this.state.year} `, 
+            salary : this.state.salary,
+            notes : this.state.notes,
+            
+        }
+        console.log(this.employeePayrollObject);
+
+    //   TODOLIST;
+      EmployeeService
+    // this.employeeService
+      .addEmployee(this.employeePayrollObject)
+      .then((data)=>{
+        console.log(data);
+        alert("Data Added Successfully!!", data)
+      })
+      .catch(error =>{
+        console.log(error);
+        alert("Error!!")
+      })
+        
+    }
+
+    render() {
+        return (
+
+            <div>
+              
+                <Header />
+
+
+                <div className='form-content'>
+
+                    <form className="form" action="#" onReset={this.reset} onSubmit={this.save}>
+
+                        <div className="form-head">Employee Payroll Form
                         </div>
-                    </div>
-                </header>
-            </div> */}
-
-
-            <Header/>
-
-
-            <div className='form-content'>
-
-               <form className="form"  action="#" onReset={this.reset} onSubmit={this.save}>
-
-                            <div className="form-head">Employee Payroll Form
-                            </div>
 
                         <div className="row-content">
                             <label className="label text" htmlFor="name">Name :</label>
-                            <input className="input" type="text" id="name" name="name" value={this.state.name}  placeholder="Your name.." required/>
+                            <input className="input" type="text" id="name" name="name" value={this.state.name} onChange={this.onNameChange} placeholder="Your name.." required />
                             <error-output className="text-error" htmlFor="text">{this.state.nameError}</error-output>
                         </div>
 
 
 
                         <div className="row-content">
-                            <label className="label text" htmlFor="profile">Profile image :</label>
+                            <label className="label text" htmlFor="imagePath">Profile image :</label>
                             <div className="profile-radio-content">
                                 <label>
-                                    <input type="radio" id="profile1" name="profile" 
-                                             value="../../assets/Ellipse -3.png" required/>
-                                    <img className="profile" id="image1" src={profile1} alt="image1"/>
+                                    <input type="radio" id="profile1" name="imagePath" onChange={this.changeValue}
+                                        value="../../assets/Ellipse -3.png" required />
+                                    <img className="profile" id="image1" src={profile1} alt="image1" />
                                 </label>
                                 <label>
-                                    <input type="radio" id="profile2" name="profile" onChange={this.changeValue}
-                                            ref={this.profileRef2} value="..\assets\Ellipse 1.png" required/>
-                                    <img className="profile" id="image2" src={profile2} alt="image2"/>
+                                    <input type="radio" id="profile2" name="imagePath" onChange={this.changeValue}
+                                        ref={this.profileRef2} value="../assets/Ellipse 1.png" required />
+                                    <img className="profile" id="image2" src={profile2} alt="image2" />
                                 </label>
                                 <label>
-                                    <input type="radio" id="profile3" name="profile" onChange={this.changeValue}
-                                            ref={this.profileRef3} value="..\assets\Ellipse -8.png" required/>
-                                    <img className="profile" id="image3" src={profile3} alt="image3"/>
+                                    <input type="radio" id="profile3" name="imagePath" onChange={this.changeValue}
+                                        ref={this.profileRef3} value="../assets/Ellipse -8.png" required />
+                                    <img className="profile" id="image3" src={profile3} alt="image3" />
                                 </label>
                                 <label>
-                                    <input type="radio" id="profile4" name="profile" onChange={this.changeValue}
-                                            ref={this.profileRef4} value="..\assets\Ellipse -7.png" required/>
-                                    <img className="profile" id="image4" src={profile4} alt="image4"/>
+                                    <input type="radio" id="profile4" name="imagePath" onChange={this.changeValue}
+                                        ref={this.profileRef4} value="../assets/Ellipse -7.png" required />
+                                    <img className="profile" id="image4" src={profile4} alt="image4" />
                                 </label>
-                            </div>       
+                            </div>
                         </div>
 
 
                         <div className="row-content">
-                   <label className="label text" htmlFor="gender">Gender</label>
-                    <select
-                      className="input"
-                      onChange={this.handleGenderChange}
-                    required>
-                    <option value="none" selected disabled hidden>Select an Option</option>
-                      <option value="M">Male</option>
-                      <option value="F">Female</option>
-                    </select>
-                  </div>
-
-
-                  <div className="row-content">
-                            <label className="label text" for="department">Department</label>
-                            <div>
-                                <input type="checkbox" id="hr" name="department" value="HR" ref={this.departmentRef1} onChange={this.getChecked}/>
-                                <label className="text" for="hr">HR</label>
-                                <input type="checkbox" id="sales" name="department" value="Sales" ref={this.departmentRef2} onChange={this.getChecked}/>
-                                <label className="text" for="sales">Sales</label>
-                                <input type="checkbox" id="finance" name="department" value="Finance" ref={this.departmentRef3} onChange={this.getChecked}/>
-                                <label className="text" for="finance">Finance</label>
-                                <input type="checkbox" id="engineer" name="department" value="Engineer" ref={this.departmentRef4} onChange={this.getChecked}/>
-                                <label className="text" for="engineer">Engineer</label>
-                                <input type="checkbox" id="others" name="department" value="Others" ref={this.departmentRef5} onChange={this.getChecked}/>
-                                <label className="text" for="others">Others</label>
-                            </div>
-                    </div>
-
-                    <div className="row-content">
-                            <label className="label text" for="salary">Salary: </label>
-                            <input className="input" type="text" name="salary" id="salary" value={this.state.salary} onChange={this.changeValue}/>
+                            <label className="label text" htmlFor="gender">Gender</label>
+                            <select
+                            value={this.state.gender} name= "gender"
+                                className="input"
+                                //   onChange={this.handleGenderChange}
+                                onChange={this.changeValue}
+                                required>
+                                <option value=" "  disabled selected >Select an Option</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
                         </div>
 
-                         {/* <div className="row-content">
-                            <label className="label text" htmlFor="startDate">Start Date</label>
-                            <select onChange={this.changeValue} id="day " name='day'>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                            </select>
-                            <select onChange={this.changeValue} id="month " name='month'>
-                                <option value="Jan">January</option>
-                                <option value="Feb">February</option>
-                            </select>
-                            <select onChange={this.changeValue} id="year " name='year'>
-                            <option value="2020">2020</option>
-                            </select> */}
-                            
-                            
-                            <div className="row-content">
+
+                        <div className="row-content">
+                            <label className="label text" for="department" >Department</label>
+                            <div>
+                                <input type="checkbox" id="hr" name="department" value="HR" ref={this.departmentRef1} onChange={this.changeValue} checked={this.isCheckBoxChecked("HR")} />
+                                <label className="text" for="hr">HR</label>
+                                <input type="checkbox" id="sales" name="department" value="Sales" ref={this.departmentRef2} onChange={this.changeValue} checked={this.isCheckBoxChecked("Sales")}/>
+                                <label className="text" for="sales">Sales</label>
+                                <input type="checkbox" id="finance" name="department" value="Finance" ref={this.departmentRef3} onChange={this.changeValue}  checked={this.isCheckBoxChecked("Finance")}/>
+                                <label className="text" for="finance">Finance</label>
+                                <input type="checkbox" id="engineer" name="department" value="Engineer" ref={this.departmentRef4} onChange={this.changeValue}  checked={this.isCheckBoxChecked("Engineer")}/>
+                                <label className="text" for="engineer">Engineer</label>
+                                <input type="checkbox" id="others" name="department" value="Others" ref={this.departmentRef5} onChange={this.changeValue} checked={this.isCheckBoxChecked("Others")} />
+                                <label className="text" for="others">Others</label>
+                            </div>
+                        </div>
+
+                        <div className="row-content">
+                            <label className="label text" htmlFor="salary">Salary: </label>
+                            <input className="input" type="text" name="salary" id="salary" min="3000" max="50000" step="100" value={this.state.salary} onChange={this.changeValue} />
+                            {/* <output className="salary-output text" htmlFor="salary">{this.state.salary}</output>
+                            <error-output className="text-error" htmlFor="text"> Minimum 3000</error-output> */}
+                        </div>
+
+
+
+                        <div className="row-content">
                             <label className="label text" htmlFor="startDate">Start Date</label>
                             <div id="date">
-                                <select name="Day" id="day" onChange={this.changeValue}>
-                                <option value="Day">Day</option>
+                                <select  value={this.state.day} name="day" id="day" onChange={this.changeValue}>
+                                    <option value="Day">Day</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -180,10 +233,10 @@ import profile4 from '../../assets/Ellipse -7.png';
                                     <option value="28">28</option>
                                     <option value="29">29</option>
                                     <option value="30">30</option>
-                                    <option value="31">31</option>                                            
+                                    <option value="31">31</option>
                                 </select>
-                                <select name="Month" id="month" onChange={this.changeValue}>
-                                <option value="Month">Month</option>
+                                <select name="month" id="month" onChange={this.changeValue} value={this.state.month}>
+                                    <option value="Month">Month</option>
 
                                     <option value="Jan">January</option>
                                     <option value="Feb">Febuary</option>
@@ -198,8 +251,8 @@ import profile4 from '../../assets/Ellipse -7.png';
                                     <option value="Nov">November</option>
                                     <option value="Dec">December</option>
                                 </select>
-                                <select name="Year" id="year" onChange={this.changeValue}>
-                                <option value="Year">Year</option>
+                                <select name="year" id="year" onChange={this.changeValue} value={this.state.year}>
+                                    <option value="Year">Year</option>
                                     <option value="2021">2021</option>
                                     <option value="2020">2020</option>
                                     <option value="2019">2019</option>
@@ -213,7 +266,7 @@ import profile4 from '../../assets/Ellipse -7.png';
 
                         <div className="row-content">
                             <label className="label text" for="notes">Notes</label>
-                            <textarea name="notes" id="notes" className="input" value={this.state.notes} onChange={this.changeValue} placeholder="" style={{height: 100}}></textarea>
+                            <textarea name="notes" id="notes" className="input" value={this.state.notes} onChange={this.changeValue} placeholder="" style={{ height: 100 }}></textarea>
                         </div>
 
                         <div className="button-content">
@@ -224,10 +277,10 @@ import profile4 from '../../assets/Ellipse -7.png';
                             </div>
                         </div>
 
-                </form>
+                    </form>
 
+                </div>
             </div>
-  </div>
         )
     }
 }
