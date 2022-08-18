@@ -141,36 +141,61 @@ isCheckBoxChecked(deptName) {
                                 </label>
                                 <label>
                                     <input type="radio" id="profile2" name="imagePath" onChange={this.changeValue}
-                                        ref={this.profileRef2} value="../assets/Ellipse 1.png" required />
+                                        ref={this.profileRef2} value="../../assets/Ellipse 1.png" required />
                                     <img className="profile" id="image2" src={profile2} alt="image2" />
                                 </label>
                                 <label>
                                     <input type="radio" id="profile3" name="imagePath" onChange={this.changeValue}
-                                        ref={this.profileRef3} value="../assets/Ellipse -8.png" required />
+                                        ref={this.profileRef3} value="../../assets/Ellipse -8.png" required />
                                     <img className="profile" id="image3" src={profile3} alt="image3" />
                                 </label>
                                 <label>
                                     <input type="radio" id="profile4" name="imagePath" onChange={this.changeValue}
-                                        ref={this.profileRef4} value="../assets/Ellipse -7.png" required />
+                                        ref={this.profileRef4} value="../../assets/Ellipse -7.png" required />
                                     <img className="profile" id="image4" src={profile4} alt="image4" />
                                 </label>
                             </div>
                         </div>
 
 
-                        <div className="row-content">
+                        {/* <div className="row-content">
                             <label className="label text" htmlFor="gender">Gender</label>
                             <select
                             value={this.state.gender} name= "gender"
                                 className="input"
-                                //   onChange={this.handleGenderChange}
                                 onChange={this.changeValue}
                                 required>
                                 <option value=" "  disabled selected >Select an Option</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
-                        </div>
+
+                       </div> */}
+
+
+                       <div className="row-content">
+                   <label className="label text" htmlFor="gender">Gender</label>
+                    <select
+                      className="input"
+                      value={this.state.gender}
+                      name= "gender"
+                      onChange={this.changeValue}
+                                    required>
+                    <option value="none" selected disabled hidden>Select an Option</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                    </div>
+
+                        {/* <div className="row-content">
+                        <label className="label text" htmlFor="gender">Gender</label>
+                            <div>
+                                <input type="radio" id="male"   name="gender"  ref={this.genderRefMale} onChange={this.changeValue}/>
+                                <label className="text" for="Male">Male</label>
+                                <input type="radio" id="female"  name="gender"  ref={this.genderRefFemale} onChange={this.changeValue}/>
+                                <label className="text" for="female">Female</label>
+                            </div>
+                        </div> */}
 
 
                         <div className="row-content">
